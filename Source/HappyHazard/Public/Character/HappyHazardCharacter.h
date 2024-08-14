@@ -44,6 +44,11 @@ class AHappyHazardCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Aim Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AimAction;
+
+
 public:
 	AHappyHazardCharacter();
 	
@@ -55,7 +60,13 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
+	/** Called for Aim input */
+	void AimStart(const FInputActionValue& Value);
+
+	/** Called for Aim input */
+	void AimEnd(const FInputActionValue& Value);
+
 
 protected:
 	// APawn interface

@@ -86,6 +86,11 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHappyHazardCharacter::Look);
+
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::AimStart);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::AimEnd);
+
+		
 	}
 	else
 	{
@@ -127,4 +132,15 @@ void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Aim Start"));
+}
+
+void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Aim End"));
+
 }
