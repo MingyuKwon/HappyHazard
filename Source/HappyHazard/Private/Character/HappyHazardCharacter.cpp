@@ -42,7 +42,8 @@ AHappyHazardCharacter::AHappyHazardCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	CameraBoom->SocketOffset = FVector(0.f, 30.f, 75.f);
+	CameraBoom->TargetArmLength = 120.f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -52,6 +53,18 @@ AHappyHazardCharacter::AHappyHazardCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AHappyHazardCharacter::Tick(float deltaTime)
+{
+	Super::Tick(deltaTime);
+
+	if (bNowAiming)
+	{
+		FRotator NewRotation = Controller->GetControlRotation();
+		NewRotation.Pitch = 0.0f; 
+		SetActorRotation(NewRotation);
+	}
 }
 
 void AHappyHazardCharacter::BeginPlay()
@@ -78,8 +91,8 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHappyHazardCharacter::Move);
@@ -136,11 +149,23 @@ void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 
 void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Aim Start"));
+	bNowAiming = true;
+	CameraBoom->TargetArmLength = 70.f;
+	CameraBoom->SocketOffset = FVector(0.f, 50.f, 70.f);
+
+	GetCharacterMovement()->bOrientRotationToMovement = false; 
+	GetCharacterMovement()->MaxWalkSpeed = 200.0f; 
+
 }
 
 void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Aim End"));
+	bNowAiming = false;
+	CameraBoom->TargetArmLength = 120.f;
+	CameraBoom->SocketOffset = FVector(0.f, 30.f, 75.f);
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->MaxWalkSpeed = 400.0f; 
+
 
 }

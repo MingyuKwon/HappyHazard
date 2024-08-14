@@ -52,6 +52,7 @@ class AHappyHazardCharacter : public ACharacter
 public:
 	AHappyHazardCharacter();
 	
+	virtual void Tick(float deltaTime) override;
 
 protected:
 
@@ -67,6 +68,10 @@ protected:
 	/** Called for Aim input */
 	void AimEnd(const FInputActionValue& Value);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
+	bool bNowAiming = false;
+
+
 
 protected:
 	// APawn interface
@@ -80,5 +85,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	/** Returns Is Player is Aiming **/
+	UFUNCTION(BlueprintCallable)
+	bool GetIsAiming() const { return bNowAiming; }
+
 };
 
