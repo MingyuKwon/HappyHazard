@@ -59,12 +59,38 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 
+	AimingLerp(deltaTime);
+
 	if (bNowAiming)
 	{
 		FRotator NewRotation = Controller->GetControlRotation();
 		NewRotation.Pitch = 0.0f; 
 		SetActorRotation(NewRotation);
 	}
+
+}
+
+void AHappyHazardCharacter::AimingLerp(float deltaTime)
+{
+	if (bNowAiming)
+	{
+		AimingPercent += deltaTime * 5;
+
+	}
+	else
+	{
+		AimingPercent -= deltaTime * 5;
+	
+	}
+
+	AimingPercent = FMath::Clamp(AimingPercent, 0.f, 1.f);
+
+	float LerpArmLength = FMath::Lerp(DefaultArmLength, AimArmLength, AimingPercent);
+	FVector LerpSocketPosition = FMath::Lerp(DefaultSocketPosition, AimSocketPosition, AimingPercent);
+
+	CameraBoom->TargetArmLength = LerpArmLength;
+	CameraBoom->SocketOffset = LerpSocketPosition;
+
 }
 
 void AHappyHazardCharacter::BeginPlay()
@@ -75,6 +101,7 @@ void AHappyHazardCharacter::BeginPlay()
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+
 
 void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -150,8 +177,6 @@ void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 {
 	bNowAiming = true;
-	CameraBoom->TargetArmLength = 70.f;
-	CameraBoom->SocketOffset = FVector(0.f, 50.f, 70.f);
 
 	GetCharacterMovement()->bOrientRotationToMovement = false; 
 	GetCharacterMovement()->MaxWalkSpeed = 200.0f; 
@@ -161,8 +186,6 @@ void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 {
 	bNowAiming = false;
-	CameraBoom->TargetArmLength = 120.f;
-	CameraBoom->SocketOffset = FVector(0.f, 30.f, 75.f);
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f; 

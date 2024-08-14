@@ -68,10 +68,19 @@ protected:
 	/** Called for Aim input */
 	void AimEnd(const FInputActionValue& Value);
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
 	bool bNowAiming = false;
+	// this is used for Aiming start and end. using Camera Arm distance lerping (min 0, max 1)
+	float AimingPercent = 0.f;
 
+	float DefaultArmLength = 120.f;
+	float AimArmLength = 70.f;
 
+	FVector DefaultSocketPosition = FVector(0.f, 30.f, 75.f);
+	FVector AimSocketPosition = FVector(0.f, 50.f, 70.f);
+
+	void AimingLerp(float deltaTime);
 
 protected:
 	// APawn interface
