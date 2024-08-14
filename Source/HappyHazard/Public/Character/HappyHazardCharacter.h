@@ -48,6 +48,10 @@ class AHappyHazardCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AimAction;
 
+	/** Shoot Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
+
 
 public:
 	AHappyHazardCharacter();
@@ -68,6 +72,11 @@ protected:
 	/** Called for Aim input */
 	void AimEnd(const FInputActionValue& Value);
 
+	/** Called for Fire input */
+	void Fire(const FInputActionValue& Value);
+
+
+	bool bShootable = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
 	bool bNowAiming = false;
@@ -96,7 +105,10 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	/** Returns Is Player is Aiming **/
 	UFUNCTION(BlueprintCallable)
-	bool GetIsAiming() const { return bNowAiming; }
+	bool GetIsAiming() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsShootable() const { return bShootable; }
 
 };
 

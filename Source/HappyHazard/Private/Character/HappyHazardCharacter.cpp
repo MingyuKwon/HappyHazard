@@ -61,7 +61,7 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 	AimingLerp(deltaTime);
 
-	if (bNowAiming)
+	if (GetIsAiming())
 	{
 		FRotator NewRotation = Controller->GetControlRotation();
 		NewRotation.Pitch = 0.0f; 
@@ -72,7 +72,7 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 void AHappyHazardCharacter::AimingLerp(float deltaTime)
 {
-	if (bNowAiming)
+	if (GetIsAiming())
 	{
 		AimingPercent += deltaTime * 5;
 
@@ -84,6 +84,8 @@ void AHappyHazardCharacter::AimingLerp(float deltaTime)
 	}
 
 	AimingPercent = FMath::Clamp(AimingPercent, 0.f, 1.f);
+	bShootable = (AimingPercent >= 0.99f);
+	
 
 	float LerpArmLength = FMath::Lerp(DefaultArmLength, AimArmLength, AimingPercent);
 	FVector LerpSocketPosition = FMath::Lerp(DefaultSocketPosition, AimSocketPosition, AimingPercent);
@@ -97,6 +99,11 @@ void AHappyHazardCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+}
+
+bool AHappyHazardCharacter::GetIsAiming() const
+{
+	return bNowAiming && !GetCharacterMovement()->IsFalling(); 
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -126,6 +133,10 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHappyHazardCharacter::Look);
+
+		// Fire
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::Fire);
+
 
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::AimStart);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::AimEnd);
@@ -179,7 +190,7 @@ void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 	bNowAiming = true;
 
 	GetCharacterMovement()->bOrientRotationToMovement = false; 
-	GetCharacterMovement()->MaxWalkSpeed = 200.0f; 
+	GetCharacterMovement()->MaxWalkSpeed = 100.0f; 
 
 }
 
@@ -191,4 +202,11 @@ void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f; 
 
 
+}
+
+void AHappyHazardCharacter::Fire(const FInputActionValue& Value)
+{
+	if (!bShootable) return;
+
+ 	UE_LOG(LogTemp, Warning, TEXT("Fire"));
 }
