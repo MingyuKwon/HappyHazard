@@ -209,8 +209,23 @@ void AHappyHazardCharacter::Move(const FInputActionValue& Value)
 
 void AHappyHazardCharacter::SetMoveInputLerp(float aimmoveXInput, float aimmoveYInput)
 {
-	moveXInput = FMath::Lerp(moveXInput, aimmoveXInput, 0.1f);
-	moveYInput = FMath::Lerp(moveYInput, aimmoveYInput, 0.1f);
+	if (aimmoveXInput * moveXInput < 0)
+	{
+		moveXInput = FMath::Lerp(moveXInput, aimmoveXInput, 0.03f);
+	}
+	else
+	{
+		moveXInput = FMath::Lerp(moveXInput, aimmoveXInput, 0.1f);
+	}
+
+	if (aimmoveYInput * moveYInput < 0)
+	{
+		moveYInput = FMath::Lerp(moveYInput, aimmoveYInput, 0.03f);
+	}
+	else
+	{
+		moveYInput = FMath::Lerp(moveYInput, aimmoveYInput, 0.1f);
+	}
 }
 
 void AHappyHazardCharacter::Look(const FInputActionValue& Value)
