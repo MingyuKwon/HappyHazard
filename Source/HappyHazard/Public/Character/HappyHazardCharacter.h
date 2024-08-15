@@ -75,6 +75,12 @@ protected:
 	/** Called for Fire input */
 	void Fire(const FInputActionValue& Value);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Aim Parameter", meta = (AllowPrivateAccess = "true"))
+	float MouseSensitivity = 0.8f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Aim Parameter", meta = (AllowPrivateAccess = "true"))
+	float MouseAimSensitivity = 0.4f;
+
 
 	bool bShootable = false;
 
