@@ -85,15 +85,17 @@ protected:
 
 	float DefaultArmLength = 120.f;
 	float AimArmLength = 60.f;
-	float AimUpArmLength = 70.f;
-	float AimDownArmLength = 70.f;
+	float AimUpArmLength = -60.0f;
+	float AimDownArmLength = 90.f;
 
 	FVector DefaultSocketPosition = FVector(0.f, 30.f, 75.f);
 	FVector AimSocketPosition = FVector(0.f, 50.f, 70.f);
-	FVector AimUpSocketPosition = FVector(0.f, 50.f, 70.f);
-	FVector AimDownSocketPosition = FVector(0.f, 50.f, 70.f);
+	FVector AimUpSocketPosition = FVector(-45.f, 40.f, 40.f);
+	FVector AimDownSocketPosition = FVector(0.f, 40.f, 35.f);
 
 	void AimingLerp(float deltaTime);
+	void AimingPitchLerp(float deltaTime);
+
 
 	float moveXInput = 0.f;
 	float moveYInput = 0.f;
@@ -120,6 +122,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetMoveYInput() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetAimPitch() const;
+
 
 	UFUNCTION(BlueprintCallable)
 	bool GetIsShootable() const { return bShootable; }

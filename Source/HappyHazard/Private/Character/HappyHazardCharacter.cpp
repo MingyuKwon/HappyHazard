@@ -28,7 +28,7 @@ AHappyHazardCharacter::AHappyHazardCharacter()
 
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f); // ...at this rotation rate
 
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
 	// instead of recompiling to adjust them
@@ -78,10 +78,12 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 
 	AimingLerp(deltaTime);
+	AimingPitchLerp(deltaTime);
 
 	if (GetIsAiming())
 	{
 		FRotator NewRotation = Controller->GetControlRotation();
+		NewRotation.Pitch = 0;
 		SetActorRotation(NewRotation);
 	}
 
@@ -113,6 +115,35 @@ void AHappyHazardCharacter::AimingLerp(float deltaTime)
 
 }
 
+void AHappyHazardCharacter::AimingPitchLerp(float deltaTime)
+{
+	if (!GetIsAiming()) return;
+
+	float Pitch = GetAimPitch();
+
+	Pitch = Pitch / 90;
+
+	if (Pitch >= 0)
+	{
+		float LerpArmLength = FMath::Lerp(AimArmLength, AimUpArmLength, Pitch);
+		CameraBoom->TargetArmLength = LerpArmLength;
+
+		FVector LerpSocketPosition = FMath::Lerp(AimSocketPosition, AimUpSocketPosition, Pitch);
+		CameraBoom->SocketOffset = LerpSocketPosition;
+
+	}
+	else
+	{
+		Pitch = FMath::Abs(Pitch);
+		float LerpArmLength = FMath::Lerp(AimArmLength, AimDownArmLength, Pitch);
+		CameraBoom->TargetArmLength = LerpArmLength;
+
+		FVector LerpSocketPosition = FMath::Lerp(AimSocketPosition, AimDownSocketPosition, Pitch);
+		CameraBoom->SocketOffset = LerpSocketPosition;
+
+	}
+}
+
 void AHappyHazardCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -132,6 +163,24 @@ float AHappyHazardCharacter::GetMoveXInput() const
 float AHappyHazardCharacter::GetMoveYInput() const
 {
 	return moveYInput;
+}
+
+float AHappyHazardCharacter::GetAimPitch() const
+{
+	float Pitch = 0.f;
+
+	if (Controller)
+	{
+		Pitch = Controller->GetControlRotation().Pitch;
+		if (Pitch >= 180)
+		{
+			Pitch -= 360;
+		}
+		Pitch = FMath::Clamp(Pitch, -90.f, 90.f);
+	
+	}
+	
+	return Pitch;
 }
 
 //////////////////////////////////////////////////////////////////////////
