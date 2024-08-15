@@ -82,7 +82,6 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 	if (GetIsAiming())
 	{
 		FRotator NewRotation = Controller->GetControlRotation();
-		NewRotation.Pitch = 0.0f; 
 		SetActorRotation(NewRotation);
 	}
 
