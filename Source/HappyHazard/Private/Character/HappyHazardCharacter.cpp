@@ -59,6 +59,13 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 
+	if (GEngine)
+	{
+		FString text = FString::Printf(TEXT("MovementVector Velocity %f"), GetCharacterMovement()->Velocity.Length());
+		GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::Blue, text);
+	}
+
+
 	AimingLerp(deltaTime);
 
 	if (GetIsAiming())
@@ -67,6 +74,8 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 		NewRotation.Pitch = 0.0f; 
 		SetActorRotation(NewRotation);
 	}
+
+
 
 }
 
@@ -104,6 +113,16 @@ void AHappyHazardCharacter::BeginPlay()
 bool AHappyHazardCharacter::GetIsAiming() const
 {
 	return bNowAiming && !GetCharacterMovement()->IsFalling(); 
+}
+
+float AHappyHazardCharacter::GetMoveXInput() const
+{
+	return (GetCharacterMovement()->Velocity.Length() <= 0) ? 0 : moveXInput;
+}
+
+float AHappyHazardCharacter::GetMoveYInput() const
+{
+	return (GetCharacterMovement()->Velocity.Length() <= 0) ? 0 : moveYInput;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -169,6 +188,9 @@ void AHappyHazardCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		moveXInput = MovementVector.X;
+		moveYInput = MovementVector.Y;
 	}
 }
 

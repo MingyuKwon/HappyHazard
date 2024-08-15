@@ -91,6 +91,10 @@ protected:
 
 	void AimingLerp(float deltaTime);
 
+	float moveXInput = 0.f;
+	float moveYInput = 0.f;
+
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -106,6 +110,12 @@ public:
 	/** Returns Is Player is Aiming **/
 	UFUNCTION(BlueprintCallable)
 	bool GetIsAiming() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetMoveXInput() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetMoveYInput() const;
 
 	UFUNCTION(BlueprintCallable)
 	bool GetIsShootable() const { return bShootable; }
