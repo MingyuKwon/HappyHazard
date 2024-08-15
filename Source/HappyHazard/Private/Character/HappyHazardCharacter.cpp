@@ -61,8 +61,19 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 	if (GEngine)
 	{
-		FString text = FString::Printf(TEXT("MovementVector Velocity %f"), GetCharacterMovement()->Velocity.Length());
+		FString text = FString::Printf(TEXT("MovementVector moveXInput %f"), moveXInput);
 		GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::Blue, text);
+	}
+
+	if (GEngine)
+	{
+		FString text = FString::Printf(TEXT("MovementVector moveYInput %f"), moveYInput);
+		GEngine->AddOnScreenDebugMessage(2, 0.f, FColor::Red, text);
+	}
+
+	if (GetCharacterMovement()->Velocity.Length() <= 0)
+	{
+		SetMoveInputLerp(0.f, 0.f);
 	}
 
 
@@ -74,7 +85,6 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 		NewRotation.Pitch = 0.0f; 
 		SetActorRotation(NewRotation);
 	}
-
 
 
 }
@@ -117,12 +127,12 @@ bool AHappyHazardCharacter::GetIsAiming() const
 
 float AHappyHazardCharacter::GetMoveXInput() const
 {
-	return (GetCharacterMovement()->Velocity.Length() <= 0) ? 0 : moveXInput;
+	return moveXInput;
 }
 
 float AHappyHazardCharacter::GetMoveYInput() const
 {
-	return (GetCharacterMovement()->Velocity.Length() <= 0) ? 0 : moveYInput;
+	return moveYInput;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -189,9 +199,18 @@ void AHappyHazardCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
-		moveXInput = MovementVector.X;
-		moveYInput = MovementVector.Y;
+
+		float moderateValue = (MovementVector.Length() > 1) ? 0.5f : 1;
+		
+		SetMoveInputLerp(MovementVector.X * moderateValue, MovementVector.Y * moderateValue);
 	}
+
+}
+
+void AHappyHazardCharacter::SetMoveInputLerp(float aimmoveXInput, float aimmoveYInput)
+{
+	moveXInput = FMath::Lerp(moveXInput, aimmoveXInput, 0.1f);
+	moveYInput = FMath::Lerp(moveYInput, aimmoveYInput, 0.1f);
 }
 
 void AHappyHazardCharacter::Look(const FInputActionValue& Value)

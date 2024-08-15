@@ -93,7 +93,7 @@ protected:
 
 	float moveXInput = 0.f;
 	float moveYInput = 0.f;
-
+	void SetMoveInputLerp(float aimmoveXInput, float aimmoveYInput);
 
 protected:
 	// APawn interface
