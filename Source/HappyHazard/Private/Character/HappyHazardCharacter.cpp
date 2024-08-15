@@ -34,7 +34,7 @@ AHappyHazardCharacter::AHappyHazardCharacter()
 	// instead of recompiling to adjust them
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -79,6 +79,8 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 	AimingLerp(deltaTime);
 	AimingPitchLerp(deltaTime);
+
+	SetMoveSpeed();
 
 	if (GetIsAiming())
 	{
@@ -218,6 +220,9 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::AimStart);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::AimEnd);
 
+		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::ShiftStart);
+		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::ShiftEnd);
+
 		
 	}
 	else
@@ -276,6 +281,23 @@ void AHappyHazardCharacter::SetMoveInputLerp(float aimmoveXInput, float aimmoveY
 	}
 }
 
+void AHappyHazardCharacter::SetMoveSpeed()
+{
+	float Speed = DefaultMoveSpeed;
+
+	if (bNowAiming)
+	{
+		Speed = AimMoveSpeed;
+	}
+	else if (bNowShifting)
+	{
+		Speed = ShiftMoveSpeed;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
+
+}
+
 void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -303,7 +325,6 @@ void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 	bNowAiming = true;
 
 	GetCharacterMovement()->bOrientRotationToMovement = false; 
-	GetCharacterMovement()->MaxWalkSpeed = 100.0f; 
 
 }
 
@@ -322,4 +343,15 @@ void AHappyHazardCharacter::Fire(const FInputActionValue& Value)
 	if (!bShootable) return;
 
  	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+}
+
+
+void AHappyHazardCharacter::ShiftStart(const FInputActionValue& Value)
+{
+	bNowShifting = true;
+}
+
+void AHappyHazardCharacter::ShiftEnd(const FInputActionValue& Value)
+{
+	bNowShifting = false;
 }

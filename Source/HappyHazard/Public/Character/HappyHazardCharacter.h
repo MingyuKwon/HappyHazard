@@ -52,6 +52,11 @@ class AHappyHazardCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
 
+	/** Shoot Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShiftAction;
+
+
 
 public:
 	AHappyHazardCharacter();
@@ -75,6 +80,26 @@ protected:
 	/** Called for Fire input */
 	void Fire(const FInputActionValue& Value);
 
+	/** Called for Fire input */
+	void ShiftStart(const FInputActionValue& Value);
+
+	/** Called for Fire input */
+	void ShiftEnd(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
+	bool bNowShifting = false;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movemnet Parameter", meta = (AllowPrivateAccess = "true"))
+	float AimMoveSpeed = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movemnet Parameter", meta = (AllowPrivateAccess = "true"))
+	float DefaultMoveSpeed = 200.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movemnet Parameter", meta = (AllowPrivateAccess = "true"))
+	float ShiftMoveSpeed = 300.f;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Aim Parameter", meta = (AllowPrivateAccess = "true"))
 	float MouseSensitivity = 0.8f;
 
@@ -86,10 +111,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
 	bool bNowAiming = false;
+
+
 	// this is used for Aiming start and end. using Camera Arm distance lerping (min 0, max 1)
 	float AimingPercent = 0.f;
 
-	float DefaultArmLength = 120.f;
+	float DefaultArmLength = 110.f;
 	float AimArmLength = 60.f;
 	float AimUpArmLength = -60.0f;
 	float AimDownArmLength = 90.f;
@@ -106,6 +133,8 @@ protected:
 	float moveXInput = 0.f;
 	float moveYInput = 0.f;
 	void SetMoveInputLerp(float aimmoveXInput, float aimmoveYInput);
+
+	void SetMoveSpeed();
 
 protected:
 	// APawn interface
