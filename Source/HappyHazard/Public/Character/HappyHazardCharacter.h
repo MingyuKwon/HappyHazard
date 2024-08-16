@@ -116,12 +116,12 @@ protected:
 	// this is used for Aiming start and end. using Camera Arm distance lerping (min 0, max 1)
 	float AimingPercent = 0.f;
 
-	float DefaultArmLength = 110.f;
-	float AimArmLength = 60.f;
-	float AimUpArmLength = -60.0f;
-	float AimDownArmLength = 90.f;
+	float DefaultArmLength = 130.f;
+	float AimArmLength = 70.f;
+	float AimUpArmLength = -50.0f;
+	float AimDownArmLength = 100.f;
 
-	FVector DefaultSocketPosition = FVector(0.f, 30.f, 75.f);
+	FVector DefaultSocketPosition = FVector(0.f, 40.f, 65.f);
 	FVector AimSocketPosition = FVector(0.f, 50.f, 70.f);
 	FVector AimUpSocketPosition = FVector(-45.f, 40.f, 40.f);
 	FVector AimDownSocketPosition = FVector(0.f, 40.f, 35.f);
