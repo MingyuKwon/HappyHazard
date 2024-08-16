@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "UI/PlayerHUD.h"
+#include "Controller/HappyPlayerController.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -79,6 +81,8 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 	AimingLerp(deltaTime);
 	AimingPitchLerp(deltaTime);
+
+	SetUIUpdateTick();
 
 	SetMoveSpeed();
 
@@ -150,6 +154,25 @@ void AHappyHazardCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	if (GetController())
+	{
+		HappyPlayerController = Cast<AHappyPlayerController>(GetController());
+	}
+
+	if (HappyPlayerController)
+	{
+		PlayerHUD = Cast<APlayerHUD>(HappyPlayerController->GetHUD());
+	}
+}
+
+void AHappyHazardCharacter::SetUIUpdateTick()
+{
+	if (PlayerHUD)
+	{
+		PlayerHUD->SetAimDisplay(GetIsAiming());
+	}
+
 }
 
 bool AHappyHazardCharacter::GetIsAiming() const

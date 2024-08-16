@@ -7,7 +7,23 @@
 void APlayerHUD::DrawHUD()
 {
 	Super::DrawHUD();
+}
 
+void APlayerHUD::SetAimDisplay(bool bVisible)
+{
+    if (!bVisible)
+    {
+        if (HUDAimWidget)
+        {
+            HUDAimWidget->SetVisibility(ESlateVisibility::Hidden);
+        }
+        return;
+    }
+
+    if (HUDAimWidget)
+    {
+        HUDAimWidget->SetVisibility(ESlateVisibility::Visible);
+    }
 
 }
 
@@ -17,10 +33,10 @@ void APlayerHUD::BeginPlay()
 
     if (AimCrossHairWidgetClass != nullptr)
     {
-        UAimCrossHairWidget* HUDWidget = CreateWidget<UAimCrossHairWidget>(GetWorld(), AimCrossHairWidgetClass);
-        if (HUDWidget != nullptr)
+        HUDAimWidget = CreateWidget<UAimCrossHairWidget>(GetWorld(), AimCrossHairWidgetClass);
+        if (HUDAimWidget != nullptr)
         {
-            HUDWidget->AddToViewport();
+            HUDAimWidget->AddToViewport();
         }
     }
 }

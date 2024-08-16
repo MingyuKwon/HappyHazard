@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "PlayerHUD.generated.h"
 
+class UAimCrossHairWidget;
 /**
  * 
  */
@@ -17,10 +18,14 @@ class HAPPYHAZARD_API APlayerHUD : public AHUD
 public:
 	virtual void DrawHUD() override;
 
+	void SetAimDisplay(bool bVisible);
+
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget Parameter", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class UAimCrossHairWidget> AimCrossHairWidgetClass;
+	TSubclassOf<UAimCrossHairWidget> AimCrossHairWidgetClass;
+
+	UAimCrossHairWidget* HUDAimWidget;
 
 };

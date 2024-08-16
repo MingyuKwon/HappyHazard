@@ -11,7 +11,9 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class APlayerHUD;
 struct FInputActionValue;
+class AHappyPlayerController;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -142,6 +144,13 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	APlayerHUD* PlayerHUD;
+
+	AHappyPlayerController* HappyPlayerController;
+
+
+	void SetUIUpdateTick();
 
 public:
 	/** Returns CameraBoom subobject **/
