@@ -7,6 +7,8 @@
 #include "Weapon.generated.h"
 
 class UBoxComponent;
+class UNiagaraSystem;
+class UAnimMontage;
 
 UCLASS()
 class HAPPYHAZARD_API AWeapon : public AActor
@@ -14,11 +16,11 @@ class HAPPYHAZARD_API AWeapon : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AWeapon();
 
+	virtual void Tick(float DeltaTime) override;
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -27,9 +29,14 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
+	UPROPERTY(EditAnywhere, Category = "Fire Para")
+	UNiagaraSystem* MuzzleEffect;
+
+	UPROPERTY(EditAnywhere, Category = "Fire Para")
+	UAnimMontage* FireMontage;
+
+
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	void Fire();
 };

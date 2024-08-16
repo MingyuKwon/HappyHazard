@@ -3,6 +3,9 @@
 
 #include "Battle/Weapon.h"
 #include "Components/BoxComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AWeapon::AWeapon()
@@ -24,6 +27,33 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AWeapon::Fire()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Fire"));
+
+    if (WeaponMesh && MuzzleEffect)
+    {
+        FVector MuzzleLocation = WeaponMesh->GetSocketLocation(FName("Muzzle"));
+        FRotator MuzzleRotation = WeaponMesh->GetSocketRotation(FName("Muzzle"));
+
+        UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+            GetWorld(),
+            MuzzleEffect,
+            MuzzleLocation,
+            MuzzleRotation
+        );
+    }
+
+    if (FireMontage && WeaponMesh)
+    {
+        UAnimInstance* AnimInstance = WeaponMesh->GetAnimInstance();
+        if (AnimInstance)
+        {
+            AnimInstance->Montage_Play(FireMontage);
+        }
+    }
 }
 
 // Called every frame

@@ -403,7 +403,11 @@ void AHappyHazardCharacter::Fire(const FInputActionValue& Value)
 	if (bFireLock) return;
 
 	bFireLock = true;
-	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+
+	if (EquipWeapon)
+	{
+		EquipWeapon->Fire();
+	}
 
 	FTimerHandle FireDelayHandle;
 	GetWorld()->GetTimerManager().SetTimer(FireDelayHandle, [this]()
