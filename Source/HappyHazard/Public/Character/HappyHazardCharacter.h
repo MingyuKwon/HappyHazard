@@ -14,6 +14,7 @@ class UInputAction;
 class APlayerHUD;
 struct FInputActionValue;
 class AHappyPlayerController;
+class AWeapon;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -148,6 +149,15 @@ protected:
 	APlayerHUD* PlayerHUD;
 
 	AHappyPlayerController* HappyPlayerController;
+
+	AWeapon* EquipWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class Parameter", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AWeapon> PistolClass;
+
+	void SetWeaponEquip(bool isEquiped);
+
+	bool bEquiped = false;
 
 
 	void SetUIUpdateTick();

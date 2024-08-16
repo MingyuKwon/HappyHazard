@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "UI/PlayerHUD.h"
 #include "Controller/HappyPlayerController.h"
+#include "Battle/Weapon.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -163,6 +164,35 @@ void AHappyHazardCharacter::BeginPlay()
 	if (HappyPlayerController)
 	{
 		PlayerHUD = Cast<APlayerHUD>(HappyPlayerController->GetHUD());
+	}
+}
+
+void AHappyHazardCharacter::SetWeaponEquip(bool isEquiped)
+{
+	bEquiped = isEquiped;
+
+	if (EquipWeapon)
+	{
+		EquipWeapon->Destroy();
+		EquipWeapon = nullptr;
+	}
+
+	if (bEquiped)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		if (PistolClass)
+		{
+			EquipWeapon = GetWorld()->SpawnActor<AWeapon>(PistolClass, SpawnParams);
+		}
+
+		if (EquipWeapon)
+		{
+			FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+			EquipWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("PistolSocket"));
+		}
 	}
 }
 
@@ -348,6 +378,7 @@ void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 	bNowAiming = true;
 
 	GetCharacterMovement()->bOrientRotationToMovement = false; 
+	SetWeaponEquip(true);
 
 }
 
@@ -358,6 +389,7 @@ void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f; 
 
+	SetWeaponEquip(false);
 
 }
 
