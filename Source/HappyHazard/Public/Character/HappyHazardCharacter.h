@@ -89,10 +89,6 @@ protected:
 	/** Called for Fire input */
 	void ShiftEnd(const FInputActionValue& Value);
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
-	bool bNowShifting = false;
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movemnet Parameter", meta = (AllowPrivateAccess = "true"))
 	float AimMoveSpeed = 100.f;
 
@@ -110,10 +106,6 @@ protected:
 	float MouseAimSensitivity = 0.4f;
 
 
-	bool bShootable = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
-	bool bNowAiming = false;
 
 
 	// this is used for Aiming start and end. using Camera Arm distance lerping (min 0, max 1)
@@ -159,9 +151,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class Parameter", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AWeapon> PistolClass;
 
+	bool bFireLock = false;
+	float PistolFireDelay = 1.f;
+
+
 	void SetWeaponEquip(bool isEquiped);
 
 	bool bEquiped = false;
+
+	bool bShootableAimState = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
+	bool bNowAiming = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
+	bool bNowShifting = false;
 
 
 	void SetUIUpdateTick();
@@ -186,7 +190,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable)
-	bool GetIsShootable() const { return bShootable; }
+	bool GetIsShootable() const { return bShootableAimState; }
 
 };
 

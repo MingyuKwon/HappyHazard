@@ -111,7 +111,7 @@ void AHappyHazardCharacter::AimingLerp(float deltaTime)
 	}
 
 	AimingPercent = FMath::Clamp(AimingPercent, 0.f, 1.f);
-	bShootable = (AimingPercent >= 0.99f);
+	bShootableAimState = (AimingPercent >= 0.99f);
 	
 
 	float LerpArmLength = FMath::Lerp(DefaultArmLength, AimArmLength, AimingPercent);
@@ -399,9 +399,18 @@ void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 
 void AHappyHazardCharacter::Fire(const FInputActionValue& Value)
 {
-	if (!bShootable) return;
+	if (!bShootableAimState) return;
+	if (bFireLock) return;
 
- 	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+	bFireLock = true;
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+
+	FTimerHandle FireDelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(FireDelayHandle, [this]()
+		{
+			bFireLock = false;
+		}, PistolFireDelay, false);
+
 }
 
 
