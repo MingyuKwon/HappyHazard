@@ -125,9 +125,13 @@ protected:
 	float AimDownArmLength = 100.f;
 
 	FVector DefaultSocketPosition = FVector(0.f, 40.f, 65.f);
-	FVector AimSocketPosition = FVector(0.f, 50.f, 70.f);
+	FVector AimSocketPosition = FVector(5.f, 45.f, 64.f);
 	FVector AimUpSocketPosition = FVector(-45.f, 40.f, 40.f);
 	FVector AimDownSocketPosition = FVector(0.f, 40.f, 35.f);
+
+	FRotator DefaultCameraRotation = FRotator(0.f, 0.f, 0.f);
+	FRotator AimCameraRotation = FRotator(0.f, -40.f, 0.f);
+
 
 	void AimingLerp(float deltaTime);
 	void AimingPitchLerp(float deltaTime);

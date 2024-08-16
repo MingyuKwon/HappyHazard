@@ -116,9 +116,13 @@ void AHappyHazardCharacter::AimingLerp(float deltaTime)
 
 	float LerpArmLength = FMath::Lerp(DefaultArmLength, AimArmLength, AimingPercent);
 	FVector LerpSocketPosition = FMath::Lerp(DefaultSocketPosition, AimSocketPosition, AimingPercent);
+	//FRotator LerpCameraRotator = FMath::Lerp(DefaultCameraRotation, AimCameraRotation, AimingPercent);
 
 	CameraBoom->TargetArmLength = LerpArmLength;
 	CameraBoom->SocketOffset = LerpSocketPosition;
+
+	//FollowCamera->SetRelativeRotation(LerpCameraRotator);
+
 
 }
 
