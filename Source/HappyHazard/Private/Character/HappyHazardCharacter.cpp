@@ -116,12 +116,9 @@ void AHappyHazardCharacter::AimingLerp(float deltaTime)
 
 	float LerpArmLength = FMath::Lerp(DefaultArmLength, AimArmLength, AimingPercent);
 	FVector LerpSocketPosition = FMath::Lerp(DefaultSocketPosition, AimSocketPosition, AimingPercent);
-	//FRotator LerpCameraRotator = FMath::Lerp(DefaultCameraRotation, AimCameraRotation, AimingPercent);
 
 	CameraBoom->TargetArmLength = LerpArmLength;
 	CameraBoom->SocketOffset = LerpSocketPosition;
-
-	//FollowCamera->SetRelativeRotation(LerpCameraRotator);
 
 
 }
@@ -241,6 +238,7 @@ float AHappyHazardCharacter::GetAimPitch() const
 	
 	return Pitch;
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -408,7 +406,18 @@ void AHappyHazardCharacter::Fire(const FInputActionValue& Value)
 
 	if (EquipWeapon)
 	{
-		EquipWeapon->Fire();
+		if (HappyPlayerController == nullptr) return;
+
+		int32 ViewportSizeX, ViewportSizeY;
+		HappyPlayerController->GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+		FVector2D ScreenLocation(ViewportSizeX * 0.5f, ViewportSizeY * 0.5f);
+
+		FVector WorldLocation, WorldDirection;
+		HappyPlayerController->DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection);
+
+
+		EquipWeapon->Fire(WorldLocation, WorldDirection);
 	}
 
 	if (FireMontage && GetMesh())

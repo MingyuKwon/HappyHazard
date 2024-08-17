@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -29,15 +30,29 @@ void AWeapon::BeginPlay()
 	
 }
 
-void AWeapon::Fire()
+void AWeapon::Fire(FVector CameraPosition, FVector CameraNormalVector)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Fire"));
+    FVector MuzzleLocation = WeaponMesh->GetSocketLocation(FName("Muzzle"));
+    FRotator MuzzleRotation = WeaponMesh->GetSocketRotation(FName("Muzzle"));
+
+    FVector Start = CameraPosition;
+    FVector End = Start + (CameraNormalVector * 10000.0f); 
+
+    FHitResult HitResult;
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(this);  
+
+    bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, Params);
+
+    if (bHit)
+    {
+        DrawDebugLine(GetWorld(), MuzzleLocation, HitResult.ImpactPoint, FColor::Red, false, 2.f);
+    }
+
+
 
     if (WeaponMesh && MuzzleEffect)
     {
-        FVector MuzzleLocation = WeaponMesh->GetSocketLocation(FName("Muzzle"));
-        FRotator MuzzleRotation = WeaponMesh->GetSocketRotation(FName("Muzzle"));
-
         UNiagaraFunctionLibrary::SpawnSystemAtLocation(
             GetWorld(),
             MuzzleEffect,

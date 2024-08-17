@@ -38,5 +38,6 @@ protected:
 
 
 public:	
-	void Fire();
+	void Fire(FVector CameraPosition, FVector CameraNormalVector);
+
 };

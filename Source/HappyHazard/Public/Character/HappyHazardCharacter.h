@@ -133,7 +133,6 @@ protected:
 	FRotator DefaultCameraRotation = FRotator(0.f, 0.f, 0.f);
 	FRotator AimCameraRotation = FRotator(0.f, -40.f, 0.f);
 
-
 	void AimingLerp(float deltaTime);
 	void AimingPitchLerp(float deltaTime);
 
