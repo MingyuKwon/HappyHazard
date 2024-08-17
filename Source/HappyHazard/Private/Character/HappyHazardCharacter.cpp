@@ -86,6 +86,7 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 	SetUIUpdateTick();
 
 	SetMoveSpeed();
+	SetShouldRotate();
 
 	if (GetIsAiming())
 	{
@@ -355,9 +356,36 @@ void AHappyHazardCharacter::SetMoveSpeed()
 
 }
 
+void AHappyHazardCharacter::SetShouldRotate()
+{
+	if (bNowAiming)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		return;
+	}
+
+	if (!bShouldRotate)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		return;
+	}
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+}
+
 void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 {
-	// input is a Vector2D
+	bShouldRotate = true;
+
+	if (bEquiped)
+	{
+		GetWorld()->GetTimerManager().SetTimer(LookLock, [this]() {
+			bShouldRotate = false;
+			}, 0.1f, false);
+	}
+
+
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	if (bNowAiming)
@@ -383,15 +411,12 @@ void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 
 	bNowAiming = true;
 
-	GetCharacterMovement()->bOrientRotationToMovement = false; 
-
 }
 
 void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 {
 	bNowAiming = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 void AHappyHazardCharacter::Fire(const FInputActionValue& Value)

@@ -142,6 +142,10 @@ protected:
 	void SetMoveInputLerp(float aimmoveXInput, float aimmoveYInput);
 
 	void SetMoveSpeed();
+	void SetShouldRotate();
+
+	FTimerHandle LookLock;
+
 
 protected:
 	// APawn interface
@@ -167,7 +171,7 @@ protected:
 
 	bool bEquiped = false;
 
-	bool bShouldRotateToCameraForward = false;
+	bool bShouldRotate = false;
 
 	bool bShootableAimState = false;
 
