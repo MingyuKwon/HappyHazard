@@ -56,7 +56,7 @@ void AWeapon::Fire(FVector CameraPosition, FVector CameraNormalVector)
                 GetWorld(),
                 BulletHitImpact,
                 HitResult.ImpactPoint,
-                MuzzleRotation * -1
+                HitResult.ImpactNormal.Rotation()
             );
 
             /*
