@@ -188,6 +188,10 @@ public:
 	bool GetIsAiming() const;
 
 	UFUNCTION(BlueprintCallable)
+	bool GetIEquipped() const { return bEquiped; };
+
+
+	UFUNCTION(BlueprintCallable)
 	float GetMoveXInput() const;
 
 	UFUNCTION(BlueprintCallable)
