@@ -33,6 +33,14 @@ protected:
 	UNiagaraSystem* MuzzleEffect;
 
 	UPROPERTY(EditAnywhere, Category = "Fire Para")
+	UNiagaraSystem* BulletHitImpact;
+
+	UPROPERTY(EditAnywhere, Category = "Fire Para")
+	UNiagaraSystem* BulletTrail;
+
+
+
+	UPROPERTY(EditAnywhere, Category = "Fire Para")
 	UAnimMontage* FireMontage;
 
 

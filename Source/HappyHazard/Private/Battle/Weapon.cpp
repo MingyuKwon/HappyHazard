@@ -4,8 +4,10 @@
 #include "Battle/Weapon.h"
 #include "Components/BoxComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraDataInterfaceArrayFunctionLibrary.h"
 
 
 // Sets default values
@@ -32,6 +34,8 @@ void AWeapon::BeginPlay()
 
 void AWeapon::Fire(FVector CameraPosition, FVector CameraNormalVector)
 {
+    if (WeaponMesh == nullptr) return;
+
     FVector MuzzleLocation = WeaponMesh->GetSocketLocation(FName("Muzzle"));
     FRotator MuzzleRotation = WeaponMesh->GetSocketRotation(FName("Muzzle"));
 
@@ -46,12 +50,39 @@ void AWeapon::Fire(FVector CameraPosition, FVector CameraNormalVector)
 
     if (bHit)
     {
-        DrawDebugLine(GetWorld(), MuzzleLocation, HitResult.ImpactPoint, FColor::Red, false, 2.f);
+        if (BulletHitImpact)
+        {
+            UNiagaraComponent* bulletHit = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+                GetWorld(),
+                BulletHitImpact,
+                HitResult.ImpactPoint,
+                MuzzleRotation * -1
+            );
+
+            /*
+            
+            UNiagaraComponent* bulletTrail = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+                GetWorld(),
+                BulletTrail,
+                MuzzleLocation
+            );
+
+            if (bulletTrail)
+            {
+                bulletTrail->SetVectorParameter(FName("TrailStart"), MuzzleLocation);
+                bulletTrail->SetVectorParameter(FName("TrailEnd"), HitResult.ImpactPoint);
+            }
+
+            */
+            
+
+            
+        }
+        
     }
 
 
-
-    if (WeaponMesh && MuzzleEffect)
+    if (MuzzleEffect)
     {
         UNiagaraFunctionLibrary::SpawnSystemAtLocation(
             GetWorld(),
@@ -61,7 +92,7 @@ void AWeapon::Fire(FVector CameraPosition, FVector CameraNormalVector)
         );
     }
 
-    if (FireMontage && WeaponMesh)
+    if (FireMontage)
     {
         UAnimInstance* AnimInstance = WeaponMesh->GetAnimInstance();
         if (AnimInstance)
