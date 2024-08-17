@@ -278,7 +278,7 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::ShiftStart);
 		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::ShiftEnd);
 
-		//EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::CrouchTrigger);
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::EquipTrigger);
 
 		
 	}
@@ -379,10 +379,11 @@ void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 
 void AHappyHazardCharacter::AimStart(const FInputActionValue& Value)
 {
+	if (!bEquiped) return;
+
 	bNowAiming = true;
 
 	GetCharacterMovement()->bOrientRotationToMovement = false; 
-	SetWeaponEquip(true);
 
 }
 
@@ -392,8 +393,6 @@ void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f; 
-
-	SetWeaponEquip(false);
 
 }
 
@@ -449,15 +448,9 @@ void AHappyHazardCharacter::ShiftEnd(const FInputActionValue& Value)
 	bNowShifting = false;
 }
 
-void AHappyHazardCharacter::CrouchTrigger(const FInputActionValue& Value)
+void AHappyHazardCharacter::EquipTrigger(const FInputActionValue& Value)
 {
-	if (GetCharacterMovement()->IsCrouching())
-	{
-		UnCrouch();
-	}
-	else
-	{
-		Crouch();
-	}
+	SetWeaponEquip(!bEquiped);
+
 }
 

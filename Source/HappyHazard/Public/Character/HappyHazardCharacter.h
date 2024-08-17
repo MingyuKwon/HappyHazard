@@ -62,7 +62,7 @@ class AHappyHazardCharacter : public ACharacter
 
 	/** Shoot Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* CrouchAction;
+	UInputAction* EquipAction;
 
 
 public:
@@ -94,7 +94,7 @@ protected:
 	void ShiftEnd(const FInputActionValue& Value);
 
 	/** Called for Fire input */
-	void CrouchTrigger(const FInputActionValue& Value);
+	void EquipTrigger(const FInputActionValue& Value);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movemnet Parameter", meta = (AllowPrivateAccess = "true"))
 	float AimMoveSpeed = 100.f;
