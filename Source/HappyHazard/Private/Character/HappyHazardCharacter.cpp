@@ -392,8 +392,6 @@ void AHappyHazardCharacter::AimEnd(const FInputActionValue& Value)
 	bNowAiming = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->MaxWalkSpeed = 400.0f; 
-
 }
 
 void AHappyHazardCharacter::Fire(const FInputActionValue& Value)

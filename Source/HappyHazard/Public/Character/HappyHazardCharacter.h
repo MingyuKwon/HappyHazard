@@ -167,6 +167,8 @@ protected:
 
 	bool bEquiped = false;
 
+	bool bShouldRotateToCameraForward = false;
+
 	bool bShootableAimState = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Action", meta = (AllowPrivateAccess = "true"))
