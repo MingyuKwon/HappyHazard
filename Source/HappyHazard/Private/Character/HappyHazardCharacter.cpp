@@ -88,7 +88,7 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 	SetMoveSpeed();
 	SetShouldRotate();
 
-	if (GetIsAiming())
+	if (GetIsAiming() || bEquiped)
 	{
 		FRotator NewRotation = Controller->GetControlRotation();
 		NewRotation.Pitch = 0;
@@ -358,13 +358,7 @@ void AHappyHazardCharacter::SetMoveSpeed()
 
 void AHappyHazardCharacter::SetShouldRotate()
 {
-	if (bNowAiming)
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		return;
-	}
-
-	if (!bShouldRotate)
+	if (bNowAiming || bEquiped)
 	{
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		return;
@@ -376,15 +370,6 @@ void AHappyHazardCharacter::SetShouldRotate()
 
 void AHappyHazardCharacter::Look(const FInputActionValue& Value)
 {
-	bShouldRotate = true;
-
-	if (bEquiped)
-	{
-		GetWorld()->GetTimerManager().SetTimer(LookLock, [this]() {
-			bShouldRotate = false;
-			}, 0.1f, false);
-	}
-
 
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
