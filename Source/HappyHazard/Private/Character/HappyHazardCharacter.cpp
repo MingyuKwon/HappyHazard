@@ -280,6 +280,8 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::ShiftStart);
 		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::ShiftEnd);
 
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::CrouchTrigger);
+
 		
 	}
 	else
@@ -409,6 +411,16 @@ void AHappyHazardCharacter::Fire(const FInputActionValue& Value)
 		EquipWeapon->Fire();
 	}
 
+	if (FireMontage && GetMesh())
+	{
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(FireMontage);
+		}
+	}
+
+
 	FTimerHandle FireDelayHandle;
 	GetWorld()->GetTimerManager().SetTimer(FireDelayHandle, [this]()
 		{
@@ -427,3 +439,16 @@ void AHappyHazardCharacter::ShiftEnd(const FInputActionValue& Value)
 {
 	bNowShifting = false;
 }
+
+void AHappyHazardCharacter::CrouchTrigger(const FInputActionValue& Value)
+{
+	if (GetCharacterMovement()->IsCrouching())
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Crouch();
+	}
+}
+

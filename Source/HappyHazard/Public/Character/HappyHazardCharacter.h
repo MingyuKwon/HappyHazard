@@ -15,6 +15,7 @@ class APlayerHUD;
 struct FInputActionValue;
 class AHappyPlayerController;
 class AWeapon;
+class UAnimMontage;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -59,6 +60,9 @@ class AHappyHazardCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShiftAction;
 
+	/** Shoot Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction;
 
 
 public:
@@ -89,6 +93,9 @@ protected:
 	/** Called for Fire input */
 	void ShiftEnd(const FInputActionValue& Value);
 
+	/** Called for Fire input */
+	void CrouchTrigger(const FInputActionValue& Value);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movemnet Parameter", meta = (AllowPrivateAccess = "true"))
 	float AimMoveSpeed = 100.f;
 
@@ -106,20 +113,22 @@ protected:
 	float MouseAimSensitivity = 0.4f;
 
 
+	UPROPERTY(EditAnywhere, Category = "Fire Para")
+	UAnimMontage* FireMontage;
 
 
 	// this is used for Aiming start and end. using Camera Arm distance lerping (min 0, max 1)
 	float AimingPercent = 0.f;
 
 	float DefaultArmLength = 130.f;
-	float AimArmLength = 70.f;
-	float AimUpArmLength = -50.0f;
-	float AimDownArmLength = 100.f;
+	float AimArmLength = 60.f;
+	float AimUpArmLength = 40.0f;
+	float AimDownArmLength = 60.f;
 
 	FVector DefaultSocketPosition = FVector(0.f, 40.f, 65.f);
-	FVector AimSocketPosition = FVector(5.f, 45.f, 64.f);
-	FVector AimUpSocketPosition = FVector(-45.f, 40.f, 40.f);
-	FVector AimDownSocketPosition = FVector(0.f, 40.f, 35.f);
+	FVector AimSocketPosition = FVector(5.f, 45.f, 50.f);
+	FVector AimUpSocketPosition = FVector(0.f, 40.f, 40.f);
+	FVector AimDownSocketPosition = FVector(0.f, 50.f, 50.f);
 
 	FRotator DefaultCameraRotation = FRotator(0.f, 0.f, 0.f);
 	FRotator AimCameraRotation = FRotator(0.f, -40.f, 0.f);
