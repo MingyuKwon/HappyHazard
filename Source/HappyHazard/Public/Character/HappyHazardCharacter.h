@@ -122,12 +122,12 @@ protected:
 
 	float DefaultArmLength = 130.f;
 	float AimArmLength = 60.f;
-	float AimUpArmLength = 40.0f;
+	float AimUpArmLength = 20.0f;
 	float AimDownArmLength = 60.f;
 
 	FVector DefaultSocketPosition = FVector(0.f, 40.f, 65.f);
 	FVector AimSocketPosition = FVector(5.f, 45.f, 50.f);
-	FVector AimUpSocketPosition = FVector(0.f, 40.f, 40.f);
+	FVector AimUpSocketPosition = FVector(0.f, 50.f, 30.f);
 	FVector AimDownSocketPosition = FVector(0.f, 50.f, 50.f);
 
 	FRotator DefaultCameraRotation = FRotator(0.f, 0.f, 0.f);

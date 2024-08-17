@@ -280,7 +280,7 @@ void AHappyHazardCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::ShiftStart);
 		EnhancedInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AHappyHazardCharacter::ShiftEnd);
 
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::CrouchTrigger);
+		//EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AHappyHazardCharacter::CrouchTrigger);
 
 		
 	}
