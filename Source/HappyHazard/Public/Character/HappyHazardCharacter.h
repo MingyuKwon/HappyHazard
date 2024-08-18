@@ -143,6 +143,7 @@ protected:
 
 	void SetMoveSpeed();
 	void SetShouldRotate();
+	void SetShouldPlayerFollowCamera();
 
 	FTimerHandle LookLock;
 

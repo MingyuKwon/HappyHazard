@@ -87,14 +87,7 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 	SetMoveSpeed();
 	SetShouldRotate();
-
-	if (GetIsAiming() || (bEquiped && !bNowShifting))
-	{
-		FRotator NewRotation = Controller->GetControlRotation();
-		NewRotation.Pitch = 0;
-		SetActorRotation(NewRotation);
-	}
-
+	SetShouldPlayerFollowCamera();
 
 }
 
@@ -375,6 +368,27 @@ void AHappyHazardCharacter::SetShouldRotate()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
+}
+
+void AHappyHazardCharacter::SetShouldPlayerFollowCamera()
+{
+	if (GetIsAiming())
+	{
+		FRotator NewRotation = Controller->GetControlRotation();
+		NewRotation.Pitch = 0;
+		SetActorRotation(NewRotation);
+	}
+
+	if (bEquiped )
+	{
+		if (!bNowShifting && GetCharacterMovement()->Velocity.Length() > 0)
+		{
+			FRotator NewRotation = Controller->GetControlRotation();
+			NewRotation.Pitch = 0;
+			SetActorRotation(NewRotation);
+
+		}
+	}
 }
 
 void AHappyHazardCharacter::Look(const FInputActionValue& Value)
