@@ -64,13 +64,13 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 
 	if (GEngine)
 	{
-		FString text = FString::Printf(TEXT("MovementVector moveXInput %f"), moveXInput);
+		FString text = FString::Printf(TEXT("x : %f"), moveXInput);
 		GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::Blue, text);
 	}
 
 	if (GEngine)
 	{
-		FString text = FString::Printf(TEXT("MovementVector moveYInput %f"), moveYInput);
+		FString text = FString::Printf(TEXT("y : %f"), moveYInput);
 		GEngine->AddOnScreenDebugMessage(2, 0.f, FColor::Red, text);
 	}
 
@@ -88,7 +88,7 @@ void AHappyHazardCharacter::Tick(float deltaTime)
 	SetMoveSpeed();
 	SetShouldRotate();
 
-	if (GetIsAiming() || bEquiped)
+	if (GetIsAiming() || (bEquiped && !bNowShifting))
 	{
 		FRotator NewRotation = Controller->GetControlRotation();
 		NewRotation.Pitch = 0;
@@ -358,11 +358,20 @@ void AHappyHazardCharacter::SetMoveSpeed()
 
 void AHappyHazardCharacter::SetShouldRotate()
 {
-	if (bNowAiming || bEquiped)
+	if (bNowAiming)
 	{
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		return;
 	}
+
+
+
+	if (bEquiped && !bNowShifting)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		return;
+	}
+
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 

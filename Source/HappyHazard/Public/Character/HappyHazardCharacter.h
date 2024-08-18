@@ -120,13 +120,13 @@ protected:
 	// this is used for Aiming start and end. using Camera Arm distance lerping (min 0, max 1)
 	float AimingPercent = 0.f;
 
-	float DefaultArmLength = 130.f;
+	float DefaultArmLength = 110.f;
 	float AimArmLength = 60.f;
 	float AimUpArmLength = 20.0f;
 	float AimDownArmLength = 60.f;
 
 	FVector DefaultSocketPosition = FVector(0.f, 40.f, 65.f);
-	FVector AimSocketPosition = FVector(5.f, 45.f, 50.f);
+	FVector AimSocketPosition = FVector(0.f, 45.f, 50.f);
 	FVector AimUpSocketPosition = FVector(0.f, 50.f, 30.f);
 	FVector AimDownSocketPosition = FVector(0.f, 50.f, 50.f);
 
@@ -193,6 +193,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool GetIEquipped() const { return bEquiped; };
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsShift() const { return bNowShifting; };
 
 
 	UFUNCTION(BlueprintCallable)
